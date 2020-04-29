@@ -36,7 +36,7 @@ optional arguments:
                         Webadmin Port. Default: 4444
 ````
 
-### Examples
+#### Examples
 
 Search for a Hostname in DNS
 ```
