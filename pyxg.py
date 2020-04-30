@@ -23,6 +23,7 @@ def main(ctx, username, password, url, port):
 
 
 # Build Main Group for get/set commands
+# Build get command
 @main.group()
 @click.pass_context
 def get(ctx):
@@ -30,7 +31,7 @@ def get(ctx):
     pass
 
 
-# Build get command, pass context, create option for Hostname
+# Build subcommand 'dns', pass context, create option for Hostname etc
 @get.command()
 @click.pass_context
 @click.option('--search', type=click.Choice(['hostname', 'ip'], case_sensitive=False))
@@ -90,6 +91,7 @@ def dns(ctx, search, value):
             print('IP Address: ', data[1][0][2].text, '\n')
 
 
+# Create set command in main group
 @main.group()
 @click.pass_context
 def set(ctx):
@@ -97,7 +99,7 @@ def set(ctx):
     pass
 
 
-# Build get command, pass context, create option for Hostname
+# Build subcommand 'dns', pass context, create option for Hostname etc.
 @set.command()
 @click.pass_context
 @click.option('-H', '--hostname', required=True, help='Set FQDN Hostname')
@@ -142,6 +144,7 @@ def dns(ctx, hostname, ip, recursive, v6):
     print(result[1][0].text)
 
 
+# Create remove command
 @main.group()
 @click.pass_context
 def remove(ctx):
@@ -149,6 +152,7 @@ def remove(ctx):
     pass
 
 
+# Build subcommand 'dns' to remove command. Pass Context, add option
 @remove.command()
 @click.pass_context
 @click.option('-H', '--hostname', required=True, help='Hostname FQDN to be removed')
@@ -171,5 +175,6 @@ def dns(ctx, hostname):
     print(result[1][0].text)
 
 
+# EntryPoint
 if __name__ == '__main__':
     main(obj={})
