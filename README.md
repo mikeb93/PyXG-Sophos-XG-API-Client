@@ -11,36 +11,39 @@ Clone the repository or download the file.
 Python3 is required.
 The script was developed and tested with Python 3.7
 
+Following modules are required
+
+```
+pip install click
+```
+
 ### Usage and Examples
 
 Run the script with a python3 interpreter.
 The Script needs authentication credentials as well as the URL or DNS Hostname of the XG Appliance.
 
+You can enter the ``-help`` option after every option/command to display context sensitive help
+
 ````
-usage: pyxg.py [-h] [-U USERNAME] [-P PASSWORD] [-u URL] [-p [PORT]]
-               {get,set} ...
+Usage: pyxg.py [OPTIONS] COMMAND [ARGS]...
 
-positional arguments:
-  {get,set}
-    get                 Get Information from API
-    set                 Set Information to API
+Options:
+  -U, --username TEXT  API User Name  [required]
+  -P, --password TEXT  API User Password  [required]
+  -u, --url TEXT       Hostname or IP of Sophos XG Appliance  [required]
+  -p, --port TEXT      Webadmin Port [default: 4444]
+  --help               Show this message and exit.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -U USERNAME, --username USERNAME
-                        API User Name
-  -P PASSWORD, --password PASSWORD
-                        API User Password
-  -u URL, --url URL     Hostname or IP of your Sophos XG Appliance
-  -p [PORT], --port [PORT]
-                        Webadmin Port. Default: 4444
+Commands:
+  get  Get data from API
+  set  Set data to API
 ````
 
 #### Examples
 
 Search for a Hostname in DNS
 ```
-python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com get dns -H myserver01
+python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com get dns --search=hostname myserver01
 
 Hostname:  myserver01.tld.com
 IP Address:  10.0.0.10
@@ -50,7 +53,7 @@ IP Address:  10.0.0.10
 Search for IP in DNS
 
 ```
-python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com get dns -I 10.0.0.10
+python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com  get dns --search=ip 10.0.0.10
 
 Hostname:  myserver01.tld.com
 IP Address:  10.0.0.10
@@ -59,7 +62,6 @@ IP Address:  10.0.0.10
 
 ## ToDo
 * [ ] Implement Set DNS commands
-* [ ] Redesign ArgumentParser implementation to be properly nested and only consider usable options
 * [ ] Implement more Get and Set commands other than DNS
 
 ## Contributing
