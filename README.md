@@ -35,8 +35,9 @@ Options:
   --help               Show this message and exit.
 
 Commands:
-  get  Get data from API
-  set  Set data to API
+  get     Get data from API
+  remove  Remove data to API
+  set     Set data to API
 ````
 
 #### Examples
