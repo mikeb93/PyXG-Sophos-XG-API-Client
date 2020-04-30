@@ -142,5 +142,34 @@ def dns(ctx, hostname, ip, recursive, v6):
     print(result[1][0].text)
 
 
+@main.group()
+@click.pass_context
+def remove(ctx):
+    """Remove data to API"""
+    pass
+
+
+@remove.command()
+@click.pass_context
+@click.option('-H', '--hostname', required=True, help='Hostname FQDN to be removed')
+def dns(ctx, hostname):
+    # Build XML with Auth
+    request = ET.Element('Request')
+    login = ET.SubElement(request, 'Login')
+    ET.SubElement(login, 'Username').text = ctx.obj['username']
+    ET.SubElement(login, 'Password').text = ctx.obj['password']
+
+    # Build Remove XML
+    remove = ET.SubElement(request, 'Remove')
+    dnshostentry = ET.SubElement(remove, 'DNSHostEntry')
+    ET.SubElement(dnshostentry, 'HostName').text = hostname
+
+    # API Request
+    data = {'reqxml': (None, ET.tostring(request))}
+    response = requests.post(ctx.obj['api_url'], files=data)
+    result = ET.fromstring(response.text)
+    print(result[1][0].text)
+
+
 if __name__ == '__main__':
     main(obj={})

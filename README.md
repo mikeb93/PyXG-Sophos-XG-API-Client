@@ -48,7 +48,7 @@ Options:
   --help                  Show this message and exit.
 ```
 
-Search for a Hostname in DNS
+Search for Hostname in DNS
 ```
 python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com get dns --search=hostname myserver01
 
@@ -85,10 +85,25 @@ python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com set dn
 Configuration applied successfully.
 ```
 
+##### Remove DNS commands
+
+```
+Options:
+  -H, --hostname TEXT  Hostname FQDN to be removed  [required]
+  --help               Show this message and exit.
+```
+
+Remove DNS Record
+
+```
+python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com remove dns -H myserver02.tld.com -I 10.0.0.11
+
+Configuration applied successfully.
+```
 
 ## ToDo
-* [ ] Implement Set DNS commands
 * [ ] Implement more Get and Set commands other than DNS
+* [ ] Implement a way to store credentials and url
 
 ## Contributing
 
