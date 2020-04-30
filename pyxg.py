@@ -9,7 +9,7 @@ import click
 @click.option('-P', '--password', required=True, help='API User Password')
 @click.option('-u', '--url', required=True, help='Hostname or IP of Sophos XG Appliance')
 @click.option('-p', '--port', required=False, help='Webadmin Port', show_default=True, default='4444')
-# Create contect to store auth options -> passing them on to other commands
+# Create context to store auth options -> passing them on to other commands
 @click.pass_context
 def main(ctx, username, password, url, port):
     # Build URL
@@ -105,7 +105,6 @@ def set(ctx):
 @click.option('--recursive', is_flag=True, default=True, show_default=True, help='Set if PTR Record should be created')
 @click.option('-v6', is_flag=True, default=False, show_default=True, help='Set IPv6 Address')
 def dns(ctx, hostname, ip, recursive, v6):
-
     if v6:
         ipversion = "IPv6"
     else:
@@ -121,7 +120,7 @@ def dns(ctx, hostname, ip, recursive, v6):
     ET.SubElement(login, 'Username').text = ctx.obj['username']
     ET.SubElement(login, 'Password').text = ctx.obj['password']
 
-    # Build Set
+    # Build Set XML
     set = ET.SubElement(request, 'SET')
     set.set('operation', 'add')
     dnshostentry = ET.SubElement(set, 'DNSHostEntry')
