@@ -8,7 +8,7 @@ import click
 @click.option('-U', '--username', required=True, help='API User Name')
 @click.option('-P', '--password', required=True, help='API User Password')
 @click.option('-u', '--url', required=True, help='Hostname or IP of Sophos XG Appliance')
-@click.option('-p', '--port', required=False, help='Webadmin Port',show_default=True, default='4444')
+@click.option('-p', '--port', required=False, help='Webadmin Port', show_default=True, default='4444')
 # Create contect to store auth options -> passing them on to other commands
 @click.pass_context
 def main(ctx, username, password, url, port):
@@ -62,7 +62,6 @@ def dns(ctx, search, value):
         print("Hostname: ", result[1][0].text)
         print("IP Address: ", result[1][1][0][2].text)
 
-
     elif search == 'ip':
         # IP Option chosen
         # XML is already sufficient
@@ -101,16 +100,47 @@ def set(ctx):
 # Build get command, pass context, create option for Hostname
 @set.command()
 @click.pass_context
-@click.option('-H', '--hostname', required=True)
-@click.option('-I', '--ip', required=True)
-def dns(ctx, hostname, ip):
-    # Pre-Build XML with Auth
+@click.option('-H', '--hostname', required=True, help='Set FQDN Hostname')
+@click.option('-I', '--ip', required=True, help='Set IP Address')
+@click.option('--recursive', is_flag=True, default=True, show_default=True, help='Set if PTR Record should be created')
+@click.option('-v6', is_flag=True, default=False, show_default=True, help='Set IPv6 Address')
+def dns(ctx, hostname, ip, recursive, v6):
+
+    if v6:
+        ipversion = "IPv6"
+    else:
+        ipversion = "IPv4"
+    if recursive:
+        recursion = "Enable"
+    else:
+        recursion = "Disable"
+
+    # Build XML with Auth
     request = ET.Element('Request')
     login = ET.SubElement(request, 'Login')
     ET.SubElement(login, 'Username').text = ctx.obj['username']
     ET.SubElement(login, 'Password').text = ctx.obj['password']
 
-    click.echo("SET DNS CMD")
+    # Build Set
+    set = ET.SubElement(request, 'SET')
+    set.set('operation', 'add')
+    dnshostentry = ET.SubElement(set, 'DNSHostEntry')
+    ET.SubElement(dnshostentry, 'HostName').text = hostname
+    addresslist = ET.SubElement(dnshostentry, 'AddressList')
+    address = ET.SubElement(addresslist, 'Address')
+    ET.SubElement(address, 'EntryType').text = "Manual"
+    ET.SubElement(address, 'IPFamily').text = ipversion
+    ET.SubElement(address, 'IPAddress').text = ip
+    ET.SubElement(address, 'TTL').text = "60"
+    ET.SubElement(address, 'Weight').text = "1"
+    ET.SubElement(address, 'PublishOnWAN').text = "Disable"
+    ET.SubElement(dnshostentry, 'AddReverseDNSLookUp').text = recursion
+
+    # API Request
+    data = {'reqxml': (None, ET.tostring(request))}
+    response = requests.post(ctx.obj['api_url'], files=data)
+    result = ET.fromstring(response.text)
+    print(result[1][0].text)
 
 
 if __name__ == '__main__':

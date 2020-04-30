@@ -40,6 +40,13 @@ Commands:
 ````
 
 #### Examples
+##### Get DNS Commands
+
+```
+Options:
+  --search [hostname|ip]
+  --help                  Show this message and exit.
+```
 
 Search for a Hostname in DNS
 ```
@@ -57,6 +64,25 @@ python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com  get d
 
 Hostname:  myserver01.tld.com
 IP Address:  10.0.0.10
+```
+
+##### Set DNS commands
+
+```
+Options:
+  -H, --hostname TEXT  Set FQDN Hostname  [required]
+  -I, --ip TEXT        Set IP Address  [required]
+  --recursive          Set if PTR Record should be created  [default: True]
+  -v6                  Set IPv6 Address  [default: False]
+  --help               Show this message and exit.
+```
+
+Set new DNS Record
+
+```
+python3 pyxg.py -U apiuser -P 'IAmASafeAPIPass1234' -u mysophosxg.tld.com set dns -H myserver02.tld.com -I 10.0.0.11
+
+Configuration applied successfully.
 ```
 
 
