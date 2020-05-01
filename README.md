@@ -2,6 +2,8 @@
 
 PyXG is a python API client for the Sophos XG Firewall
 
+As of right now there are only DNS commands available. I'll add more over time.
+
 ## Getting Started
 
 Clone the repository or download the file.
